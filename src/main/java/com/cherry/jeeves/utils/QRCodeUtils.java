@@ -2,16 +2,21 @@ package com.cherry.jeeves.utils;
 
 import com.google.zxing.*;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.io.File;
 
 public class QRCodeUtils {
     public static String decode(InputStream input)
@@ -28,6 +33,12 @@ public class QRCodeUtils {
         params.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
         params.put(EncodeHintType.CHARACTER_SET, StandardCharsets.UTF_8);
         BitMatrix bitMatrix = new MultiFormatWriter().encode(text, BarcodeFormat.QR_CODE, width, height, params);
+        try {
+            BitMatrix bitMatrixScale10 = new MultiFormatWriter().encode(text, BarcodeFormat.QR_CODE, width * 10, height * 10, params);
+            writeToFile(bitMatrixScale10);
+        } catch (IOException e) {
+            System.out.println("writeToFile" + e.getMessage());
+        }
         return toAscii(bitMatrix);
     }
 
@@ -38,11 +49,18 @@ public class QRCodeUtils {
                 if (!bitMatrix.get(r, c)) {
                     builder.append("\033[47m   \033[0m");
                 } else {
-                    builder.append("\033[40m   \033[0m");
+                    builder.append("\033[35m   \033[0m");
                 }
             }
             builder.append("\n");
         }
         return builder.toString();
     }
+
+
+    public static void writeToFile(BitMatrix bitMatrix) throws IOException {
+        Path path = Paths.get("qrCode.png");
+        MatrixToImageWriter.writeToPath(bitMatrix, "png", path);
+    }
+
 }

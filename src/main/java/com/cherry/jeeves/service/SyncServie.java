@@ -129,7 +129,7 @@ public class SyncServie {
                 }
                 //群
                 else if (isMessageFromChatRoom(message)) {
-                    messageHandler.onReceivingChatRoomTextMessage(message);
+                    //messageHandler.onReceivingChatRoomTextMessage(message);
                 }
                 //图片
             } else if (message.getMsgType() == MessageType.IMAGE.getCode()) {
@@ -138,11 +138,11 @@ public class SyncServie {
                 String thumbImageUrl = fullImageUrl + "&type=slave";
                 //个人
                 if (isMessageFromIndividual(message)) {
-                    messageHandler.onReceivingPrivateImageMessage(message, thumbImageUrl, fullImageUrl);
+                    //messageHandler.onReceivingPrivateImageMessage(message, thumbImageUrl, fullImageUrl);
                 }
                 //群
                 else if (isMessageFromChatRoom(message)) {
-                    messageHandler.onReceivingChatRoomImageMessage(message, thumbImageUrl, fullImageUrl);
+                    //messageHandler.onReceivingChatRoomImageMessage(message, thumbImageUrl, fullImageUrl);
                 }
             }
             //系统消息
@@ -162,7 +162,7 @@ public class SyncServie {
                     }
                     if (contacts != null) {
                         Contact contact = contacts.stream().filter(x -> Objects.equals(x.getUserName(), from)).findAny().orElse(null);
-                        messageHandler.onRedPacketReceived(contact);
+                        //messageHandler.onRedPacketReceived(contact);
                     }
                 }
             }
@@ -171,7 +171,7 @@ public class SyncServie {
                 if (messageHandler.onReceivingFriendInvitation(message.getRecommendInfo())) {
                     acceptFriendInvitation(message.getRecommendInfo());
                     logger.info("[*] you've accepted the invitation");
-                    messageHandler.postAcceptFriendInvitation(message);
+                    //messageHandler.postAcceptFriendInvitation(message);
                 } else {
                     logger.info("[*] you've declined the invitation");
                     //TODO decline invitation
@@ -205,7 +205,7 @@ public class SyncServie {
                 existingIndividuals.add(x);
             });
             if (messageHandler != null && newIndividuals.size() > 0) {
-                messageHandler.onNewFriendsFound(newIndividuals);
+                //messageHandler.onNewFriendsFound(newIndividuals);
             }
         }
         //chatroom
@@ -222,7 +222,7 @@ public class SyncServie {
             }
             existingChatRooms.addAll(newChatRooms);
             if (messageHandler != null && newChatRooms.size() > 0) {
-                messageHandler.onNewChatRoomsFound(newChatRooms);
+                //messageHandler.onNewChatRoomsFound(newChatRooms);
             }
             for (Contact chatRoom : modifiedChatRooms) {
                 Contact existingChatRoom = existingChatRooms.stream().filter(x -> x.getUserName().equals(chatRoom.getUserName())).findFirst().orElse(null);
@@ -237,7 +237,7 @@ public class SyncServie {
                     Set<ChatRoomMember> joined = newMembers.stream().filter(x -> !oldMembers.contains(x)).collect(Collectors.toSet());
                     Set<ChatRoomMember> left = oldMembers.stream().filter(x -> !newMembers.contains(x)).collect(Collectors.toSet());
                     if (joined.size() > 0 || left.size() > 0) {
-                        messageHandler.onChatRoomMembersChanged(chatRoom, joined, left);
+                        //messageHandler.onChatRoomMembersChanged(chatRoom, joined, left);
                     }
                 }
             }
@@ -251,7 +251,7 @@ public class SyncServie {
                 existingPlatforms.add(x);
             });
             if (messageHandler != null && newMediaPlatforms.size() > 0) {
-                messageHandler.onNewMediaPlatformsFound(newMediaPlatforms);
+                //messageHandler.onNewMediaPlatformsFound(newMediaPlatforms);
             }
         }
     }
@@ -274,13 +274,13 @@ public class SyncServie {
         }
         if (messageHandler != null) {
             if (individuals.size() > 0) {
-                messageHandler.onFriendsDeleted(individuals);
+                //messageHandler.onFriendsDeleted(individuals);
             }
             if (chatRooms.size() > 0) {
-                messageHandler.onChatRoomsDeleted(chatRooms);
+                //messageHandler.onChatRoomsDeleted(chatRooms);
             }
             if (mediaPlatforms.size() > 0) {
-                messageHandler.onMediaPlatformsDeleted(mediaPlatforms);
+                //messageHandler.onMediaPlatformsDeleted(mediaPlatforms);
             }
         }
     }

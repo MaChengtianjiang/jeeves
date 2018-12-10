@@ -47,8 +47,9 @@ public class MessageHandlerImpl implements MessageHandler {
         logger.info("from: " + message.getFromUserName());
         logger.info("to: " + message.getToUserName());
         logger.info("content:" + message.getContent());
-//        将原文回复给对方
-        replyMessage(message);
+//        将原文回复给自己
+        //replyMessage(message);
+        sendMessageToFilehelper(message);
     }
 
     @Override
@@ -143,5 +144,9 @@ public class MessageHandlerImpl implements MessageHandler {
 
     private void replyMessage(Message message) throws IOException {
         wechatHttpService.sendText(message.getFromUserName(), message.getContent());
+    }
+
+    private void sendMessageToFilehelper(Message message) throws IOException {
+        wechatHttpService.sendText("filehelper", message.getContent());
     }
 }
